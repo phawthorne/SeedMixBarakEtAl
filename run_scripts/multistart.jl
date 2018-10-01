@@ -1,29 +1,24 @@
+using ArgParse
 using BenchmarkTools
 using CSV
 using DataFrames
 using DelimitedFiles
 using Parameters
 using Random
-# using Plots
 using SeedMix
 using Echidna
 
 struct RunParams
     nstarts::Int64
     popsize::Int64
-    niters::Int64
+    ngens::Int64
 end
 
+
 function main()
+    parsed_args = my_parse_cli_args()
     runid = randstring(6)
     println("Run string: $runid")
-
-    if length(ARGS) >= 1
-        arg1 = parse(Int64, ARGS[1])
-        println("Using input var: $arg1")
-    else
-        arg1 = 25
-    end
 
     if "HOSTNAME" in keys(Base.EnvDict())
         project_root = "/home/hawt0010/hawt0010/Projects/SeedMix"
@@ -36,9 +31,16 @@ function main()
     end
     logfile = joinpath(output_root, "log_$(runid).txt")
 
-    mixreqs = MixRequirements(arg1, 10.0, 1.0/16.0)
-    runparams = RunParams(10, 100, 100)
-    logrun(logfile, mixreqs, runparams)
+    mixreqs = MixRequirements(
+        parsed_args["n"],
+        parsed_args["W"],
+        parsed_args["w"])
+    runparams = RunParams(
+        parsed_args["t"],
+        parsed_args["p"],
+        parsed_args["g"])
+    print_runspec(mixreqs, runparams)
+    log_runspec(logfile, mixreqs, runparams)
 
     tablefile = joinpath(project_root, "data/species_data.csv")
     phylofile = joinpath(project_root, "data/phylo_dist.csv")
@@ -49,21 +51,23 @@ function main()
     for i in 1:runparams.nstarts
         println("GA start: $i")
         runresult = dorun(sd, mixreqs, runparams)
+        save_results(joinpath(output_root, "run$i"), runresult, mixreqs)
         push!(results, runresult)
     end
 
     #= Write results =#
     pooled_results = Archive(compare_pareto_dominance, Vector{Solution}())
     for (i,r) in enumerate(results)
-        save_results(joinpath(output_root, "run$i"), r, mixreqs)
         insert_solutions!(pooled_results, r)
         @show length(pooled_results.solutions)
     end
     save_results(joinpath(output_root, "pooled"), pooled_results.solutions, mixreqs)
 end
 
+
+"Performs a single run of the GA with given data and parameters"
 function dorun(sd::SpeciesData, mixreqs::MixRequirements, runparams::RunParams)
-    @unpack popsize, niters = runparams
+    @unpack popsize, ngens = runparams
 
     objectivefuns = [get_cost, get_phylo_dist, get_bloom]
     maxobjectives = [false, true, true]
@@ -74,13 +78,15 @@ function dorun(sd::SpeciesData, mixreqs::MixRequirements, runparams::RunParams)
                       [MOGA_Real(0.0, 1.0) for i in 1:(2*length(sd))], evalfunction)
     hall_of_fame = Archive(compare_pareto_dominance, Vector{Solution}())
     archive_frequency = 100000
-    algo = NSGAII(problem, evalfunction, popsize, niters, hall_of_fame, archive_frequency)
+    algo = NSGAII(problem, evalfunction, popsize, ngens, hall_of_fame, archive_frequency)
     seedpop = init_pop(algo)
     results = garun(algo, seedpop=seedpop)
 
     return results
 end
 
+
+"Performs union of species found in results' mixes"
 function pool_spec_selections(results, mixreqs::MixRequirements)
     specs = Set{Int64}()
     for r in results
@@ -92,6 +98,8 @@ function pool_spec_selections(results, mixreqs::MixRequirements)
     return specs
 end
 
+
+"Writes output files for genomes, objectives, and mix details"
 function save_results(output_folder::String, results::Vector{Solution}, mixreqs::MixRequirements)
     if !isdir(output_folder)
         mkpath(output_folder)
@@ -131,19 +139,68 @@ function save_results(output_folder::String, results::Vector{Solution}, mixreqs:
     end
 end
 
-function logrun(filepath::String, mixreqs::MixRequirements, runparams::RunParams)
+
+"Writes mixreqs and runparams to filename"
+function log_runspec(filepath::String, mixreqs::MixRequirements, runparams::RunParams)
     open(filepath, "w") do f
         write(f, "MixRequirements\n")
-        write(f, "\tnspecs: $(mixreqs.nspecs)\n")
-        write(f, "\ttotalweight: $(mixreqs.totalweight)\n")
-        write(f, "\tminweight: $(mixreqs.minweight)\n")
+        write(f, "    nspecs: $(mixreqs.nspecs)\n")
+        write(f, "    totalweight: $(mixreqs.totalweight)\n")
+        write(f, "    minweight: $(mixreqs.minweight)\n")
         write(f, "RunParams\n")
-        write(f, "\tnstarts: $(runparams.nstarts)\n")
-        write(f, "\tpopsize: $(runparams.popsize)\n")
-        write(f, "\tniters: $(runparams.niters)\n")
+        write(f, "    nstarts: $(runparams.nstarts)\n")
+        write(f, "    popsize: $(runparams.popsize)\n")
+        write(f, "    ngens: $(runparams.ngens)\n")
     end
 end
 
+
+"Prints mixreqs and runparams to screen"
+function print_runspec(mixreqs::MixRequirements, runparams::RunParams)
+    println("MixRequirements")
+    println("    nspecs: $(mixreqs.nspecs)")
+    println("    totalweight: $(mixreqs.totalweight)")
+    println("    minweight: $(mixreqs.minweight)")
+    println("RunParams")
+    println("    nstarts: $(runparams.nstarts)")
+    println("    popsize: $(runparams.popsize)")
+    println("    ngens: $(runparams.ngens)")
+end
+
+
+"Parses commandline args"
+function my_parse_cli_args()
+    argsettings = ArgParseSettings()
+
+    @add_arg_table argsettings begin
+        "-n"
+            help = "number of species in the mix"
+            arg_type = Int64
+            default = 25
+        "-W"
+            help = "total weight of the mix"
+            arg_type = Float64
+            default = 10.0
+        "-w"
+            help = "minimum weight of each species"
+            arg_type = Float64
+            default = 1.0/16.0
+        "-t"
+            help = "number of times to run the optimization"
+            arg_type = Int64
+            default = 1
+        "-p"
+            help = "number of indivs in the EA"
+            arg_type = Int64
+            default = 100
+        "-g"
+            help = "number of generations in the EA"
+            arg_type = Int64
+            default = 100
+    end
+
+    return ArgParse.parse_args(ARGS, argsettings)
+end
 
 
 main()

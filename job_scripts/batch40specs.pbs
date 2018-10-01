@@ -3,4 +3,4 @@
 #PBS -m abe
 #PBS -M hawt0010@umn.edu
 cd ~/Projects/SeedMix/run_scripts
-~/julia-0.7.0/bin/julia dev2.jl 40
+~/julia-0.7.0/bin/julia multistart.jl -n 40 -t 10 -p 100 -g 1000
