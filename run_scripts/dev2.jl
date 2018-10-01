@@ -15,14 +15,15 @@ struct RunParams
 end
 
 function main()
+    runid = randstring(6)
+    println("Run string: $runid")
+
     if length(ARGS) >= 1
         arg1 = parse(Int64, ARGS[1])
         println("Using input var: $arg1")
     else
         arg1 = 25
     end
-
-    runid = randstring(6)
 
     if "HOSTNAME" in keys(Base.EnvDict())
         project_root = "/home/hawt0010/hawt0010/Projects/SeedMix"
@@ -36,7 +37,7 @@ function main()
     logfile = joinpath(output_root, "log_$(runid).txt")
 
     mixreqs = MixRequirements(arg1, 10.0, 1.0/16.0)
-    runparams = RunParams(4, 100, 10)
+    runparams = RunParams(10, 100, 100)
     logrun(logfile, mixreqs, runparams)
 
     tablefile = joinpath(project_root, "data/species_data.csv")
