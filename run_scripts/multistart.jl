@@ -69,8 +69,8 @@ end
 function dorun(sd::SpeciesData, mixreqs::MixRequirements, runparams::RunParams)
     @unpack popsize, ngens = runparams
 
-    objectivefuns = [get_cost, get_phylo_dist, get_bloom]
-    maxobjectives = [false, true, true]
+    objectivefuns = [get_cost, get_phylo_dist, get_bloom, get_shannon, get_consval]
+    maxobjectives = [false, true, true, true, true]
 
     evalfunction(g) = SeedMix.evaluate(objectivefuns, g, sd, mixreqs)
 
@@ -117,7 +117,10 @@ function save_results(output_folder::String, results::Vector{Solution}, mixreqs:
     cost = [r.objectives[1] for r in results]
     phylo_dist = [r.objectives[2] for r in results]
     bloom = [r.objectives[3] for r in results]
-    df = DataFrame(indiv=indiv, cost=cost, phylo_dist=phylo_dist, bloom=bloom)
+    shannon = [r.objectives[4] for r in results]
+    consval = [r.objectives[5] for r in results]
+    df = DataFrame(indiv=indiv, cost=cost, phylo_dist=phylo_dist, bloom=bloom,
+                   shannon=shannon, consval=consval)
     CSV.write(joinpath(output_folder, "objectives.csv"), df)
 
     # save per-mix seed and weight tables
