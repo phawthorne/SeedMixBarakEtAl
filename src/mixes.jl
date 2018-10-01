@@ -81,7 +81,11 @@ function length(md::MixData)
     return md.nspecs
 end
 
-
+@with_kw struct MixRequirements
+    nspecs::Int64
+    totalweight::Float64
+    minweight::Float64
+end
 
 #= Evaluation functions =#
 function get_phylo_dist(mix::MixData, sd::SpeciesData)
@@ -146,7 +150,9 @@ end
 
 #= GA helper functions =#
 
-function genome_to_mix(genome::Vector{Float64}, nspecs, mixweight)
+function genome_to_mix(genome::Vector{Float64}, mr::MixRequirements)
+    @unpack nspecs, totalweight, minweight = mr
+
     p = Int64(length(genome)/2)
     spec_priority = genome[1:p]
     spec_weight = genome[(p+1):end]
@@ -155,9 +161,10 @@ function genome_to_mix(genome::Vector{Float64}, nspecs, mixweight)
     sw = spec_weight[spec_choice]
 
     MixData(nspecs,
-            mixweight,
+            totalweight,
             spec_choice,
-            sw .* (mixweight/sum(sw)))
+            minweight .+ sw .* ((totalweight - nspecs * minweight) / sum(sw))
+    )
 end
 
 function evaluate(objectivefuns::Vector{Function}, mix::MixData, sd::SpeciesData)
@@ -166,8 +173,8 @@ function evaluate(objectivefuns::Vector{Function}, mix::MixData, sd::SpeciesData
 end
 
 function evaluate(objectivefuns::Vector{Function}, genome::Vector{Float64},
-                  sd::SpeciesData, nspecs::Int64, mixweight::Float64)
-    mix = genome_to_mix(genome, nspecs, mixweight)
+                  sd::SpeciesData, mr::MixRequirements)
+    mix = genome_to_mix(genome, mr)
     result = [f(mix, sd) for f in objectivefuns]
     return result
 end
