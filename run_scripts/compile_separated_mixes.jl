@@ -10,7 +10,7 @@ function main()
     phylofile = joinpath(project_root, "data/phylo_dist.csv")
     sd = SpeciesData(tablefile, phylofile)
 
-    run_dir = "/Users/hawt0010/Projects/julia-dev/SeedMix/results/remote/3_objective_results"
+    run_dir = "/Users/hawt0010/Projects/julia-dev/SeedMix/results/remote/5_objective_results"
     for (wroot, wdirs, wfiles) in walkdir(run_dir)
         if "mixes" in wdirs
             compile_mix_folder_nocsv(joinpath(wroot, "mixes"), sd)
@@ -63,12 +63,14 @@ function compile_mix_folder_nocsv(foldername, sd)
     end
 
     open(joinpath(foldername, "compiled_mixes.csv"), "w") do io
+        # header
         write(io, "species,")
         join(io, ("mix$i" for i in 1:nmixes), ",")
         write(io, "\n")
+        #data
         for s in 1:nspecs
-            write(io, "$(specnames[s]),")
-            join(io, wmat[s,:], ",")
+            write(io, "$(specnames[s]),") # first col
+            join(io, wmat[s,:], ",")      # data rows
             write(io, "\n")
         end
     end
