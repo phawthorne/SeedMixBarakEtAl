@@ -121,7 +121,7 @@ function get_consval(mix::MixData, sd::SpeciesData)
     @unpack conservatism = sd
     mixcons = 0.0
     for (s, w) in zip(specindices, specweights)
-        mixcons =+ w * conservatism[s]
+        mixcons += w * conservatism[s]
     end
     return mixcons
 end
@@ -146,6 +146,8 @@ function get_grass_weight_frac(mix::MixData, sd::SpeciesData)
     @unpack specindices, specweights = mix
     @unpack grass = sd
 
+    grassweight = sum(grass[i]*w for (i,w) in zip(specindices, specweights))
+    return grassweight / mix.totalweight
 end
 
 #= GA helper functions =#

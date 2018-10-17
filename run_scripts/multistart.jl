@@ -51,7 +51,7 @@ function main()
     for i in 1:runparams.nstarts
         println("GA start: $i")
         runresult = dorun(sd, mixreqs, runparams)
-        save_results(joinpath(output_root, "run$i"), runresult, mixreqs)
+        save_results(joinpath(output_root, "run$i"), runresult, mixreqs, sd)
         push!(results, runresult)
     end
 
@@ -61,7 +61,8 @@ function main()
         insert_solutions!(pooled_results, r)
         @show length(pooled_results.solutions)
     end
-    save_results(joinpath(output_root, "pooled"), pooled_results.solutions, mixreqs)
+    save_results(joinpath(output_root, "pooled"),
+                 pooled_results.solutions, mixreqs, sd)
 end
 
 
@@ -100,7 +101,8 @@ end
 
 
 "Writes output files for genomes, objectives, and mix details"
-function save_results(output_folder::String, results::Vector{Solution}, mixreqs::MixRequirements)
+function save_results(output_folder::String, results::Vector{Solution},
+                      mixreqs::MixRequirements, specdata::SpeciesData)
     if !isdir(output_folder)
         mkpath(output_folder)
     end
@@ -112,6 +114,8 @@ function save_results(output_folder::String, results::Vector{Solution}, mixreqs:
     end
     writedlm(joinpath(output_folder, "genomes.csv"), genomes, ",")
 
+    mixes = [genome_to_mix(r.x, mixreqs) for r in results]
+
     # save table of objective values
     indiv = collect(1:length(results))
     cost = [r.objectives[1] for r in results]
@@ -119,8 +123,12 @@ function save_results(output_folder::String, results::Vector{Solution}, mixreqs:
     bloom = [r.objectives[3] for r in results]
     shannon = [r.objectives[4] for r in results]
     consval = [r.objectives[5] for r in results]
+    grass_spec_frac = [get_grass_spec_frac(m, specdata) for m in mixes]
+    grass_weight_frac = [get_grass_weight_frac(m, specdata) for m in mixes]
     df = DataFrame(indiv=indiv, cost=cost, phylo_dist=phylo_dist, bloom=bloom,
-                   shannon=shannon, consval=consval)
+                   shannon=shannon, consval=consval,
+                   grass_spec_frac=grass_spec_frac,
+                   grass_weight_frac=grass_weight_frac)
     CSV.write(joinpath(output_folder, "objectives.csv"), df)
 
     # save per-mix seed and weight tables
