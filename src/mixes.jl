@@ -85,6 +85,12 @@ end
     nspecs::Int64
     totalweight::Float64
     minweight::Float64
+    maxcost::Float64
+end
+
+"no cost constraint constructor"
+function MixRequirements(nspecs::Int64, totalweight::Float64, minweight::Float64)
+    return MixRequirements(nspecs, totalweight, minweight, 0.0)
 end
 
 #= Evaluation functions =#
@@ -178,6 +184,9 @@ function evaluate(objectivefuns::Vector{Function}, genome::Vector{Float64},
                   sd::SpeciesData, mr::MixRequirements)
     mix = genome_to_mix(genome, mr)
     result = [f(mix, sd) for f in objectivefuns]
+    if mr.maxcost > 0.0
+        push!(result, max(0.0, get_cost(mix, sd) - mr.maxcost))
+    end
     return result
 end
 

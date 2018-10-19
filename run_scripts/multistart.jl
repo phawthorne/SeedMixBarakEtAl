@@ -34,7 +34,8 @@ function main()
     mixreqs = MixRequirements(
         parsed_args["n"],
         parsed_args["W"],
-        parsed_args["w"])
+        parsed_args["w"],
+        parsed_args["c"])
     runparams = RunParams(
         parsed_args["t"],
         parsed_args["p"],
@@ -72,11 +73,17 @@ function dorun(sd::SpeciesData, mixreqs::MixRequirements, runparams::RunParams)
 
     objectivefuns = [get_cost, get_phylo_dist, get_bloom, get_shannon, get_consval]
     maxobjectives = [false, true, true, true, true]
+    has_cost_constraint = mixreqs.maxcost > 0.0
 
     evalfunction(g) = SeedMix.evaluate(objectivefuns, g, sd, mixreqs)
 
-    problem = Problem(length(objectivefuns), maxobjectives, 2*length(sd),
-                      [MOGA_Real(0.0, 1.0) for i in 1:(2*length(sd))], evalfunction)
+    problem = Problem(
+        length(objectivefuns),
+        maxobjectives,
+        2*length(sd),
+        [MOGA_Real(0.0, 1.0) for i in 1:(2*length(sd))],
+        evalfunction,
+        has_cost_constraint)
     hall_of_fame = Archive(compare_pareto_dominance, Vector{Solution}())
     archive_frequency = 100000
     algo = NSGAII(problem, evalfunction, popsize, ngens, hall_of_fame, archive_frequency)
@@ -158,6 +165,7 @@ function log_runspec(filepath::String, mixreqs::MixRequirements, runparams::RunP
         write(f, "    nspecs: $(mixreqs.nspecs)\n")
         write(f, "    totalweight: $(mixreqs.totalweight)\n")
         write(f, "    minweight: $(mixreqs.minweight)\n")
+        write(f, "    maxcost: $(mixreqs.maxcost)\n")
         write(f, "RunParams\n")
         write(f, "    nstarts: $(runparams.nstarts)\n")
         write(f, "    popsize: $(runparams.popsize)\n")
@@ -172,6 +180,7 @@ function print_runspec(mixreqs::MixRequirements, runparams::RunParams)
     println("    nspecs: $(mixreqs.nspecs)")
     println("    totalweight: $(mixreqs.totalweight)")
     println("    minweight: $(mixreqs.minweight)")
+    println("    maxcost: $(mixreqs.maxcost)")
     println("RunParams")
     println("    nstarts: $(runparams.nstarts)")
     println("    popsize: $(runparams.popsize)")
@@ -208,6 +217,10 @@ function my_parse_cli_args()
             help = "number of generations in the EA"
             arg_type = Int64
             default = 100
+        "-c"
+            help = "cost constraint (0.0 -> no constraint)"
+            arg_type = Float64
+            default = 0.0
     end
 
     return ArgParse.parse_args(ARGS, argsettings)
