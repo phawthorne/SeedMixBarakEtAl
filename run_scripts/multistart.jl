@@ -125,6 +125,7 @@ function save_results(output_folder::String, results::Vector{Solution},
 
     # save table of objective values
     indiv = collect(1:length(results))
+    generation = [r.generation for r in results]
     cost = [r.objectives[1] for r in results]
     phylo_dist = [r.objectives[2] for r in results]
     bloom = [r.objectives[3] for r in results]
@@ -132,7 +133,8 @@ function save_results(output_folder::String, results::Vector{Solution},
     consval = [r.objectives[5] for r in results]
     grass_spec_frac = [get_grass_spec_frac(m, specdata) for m in mixes]
     grass_weight_frac = [get_grass_weight_frac(m, specdata) for m in mixes]
-    df = DataFrame(indiv=indiv, cost=cost, phylo_dist=phylo_dist, bloom=bloom,
+    df = DataFrame(indiv=indiv, generation=generation,
+                   cost=cost, phylo_dist=phylo_dist, bloom=bloom,
                    shannon=shannon, consval=consval,
                    grass_spec_frac=grass_spec_frac,
                    grass_weight_frac=grass_weight_frac)
