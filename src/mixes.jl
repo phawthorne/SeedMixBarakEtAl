@@ -101,6 +101,10 @@ function get_phylo_dist(mix::MixData, sd::SpeciesData)
     for s in specindices
         for t in specindices
             pd += phylo[s,t]
+            # TODO: test this (remove the /= 2.0)
+            # if t > s
+            #   pd += phylo[s,t]
+            # end
         end
     end
     return pd /= 2.0

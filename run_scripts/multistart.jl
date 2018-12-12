@@ -21,12 +21,13 @@ function main()
     println("Run string: $runid")
 
     if "HOSTNAME" in keys(Base.EnvDict())
+        # this means we're on MSI
         project_root = "/home/hawt0010/hawt0010/Projects/SeedMix"
     else
         project_root = "/Users/hawt0010/Projects/julia-dev/SeedMix"
     end
     output_root = joinpath(project_root, "results/run_$(runid)")
-    if ~ isdir(output_root)
+    if ~isdir(output_root)
         mkpath(output_root)
     end
     logfile = joinpath(output_root, "log_$(runid).txt")
