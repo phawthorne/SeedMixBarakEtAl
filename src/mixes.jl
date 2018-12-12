@@ -5,6 +5,7 @@ using Random
 import Base.length
 
 #= Species Data =#
+"SpeciesData struct"
 @with_kw struct SpeciesData
     specpool::Vector{String}
     cost::Vector{Float64}
@@ -13,6 +14,13 @@ import Base.length
     bloom::Array{Float64, 2}
     phylo::Array{Float64, 2}
 end
+
+"""
+    SpeciesData(tablefile::String, phylofile::String)
+
+Reads data from `tablefile` and `phylofile` to construct the `SpeciesData`
+structure. 
+"""
 
 function SpeciesData(tablefile::String, phylofile::String)
     table = CSV.read(tablefile)
@@ -63,6 +71,7 @@ function length(sd::SpeciesData)
 end
 
 #= MixData =#
+"MixData struct"
 @with_kw struct MixData
     nspecs::Int64
     totalweight::Float64
@@ -81,6 +90,18 @@ function length(md::MixData)
     return md.nspecs
 end
 
+"""
+Structure capturing requirements for each mix:
+
+    nspecs::Int64
+    totalweight::Float64
+    minweight::Float64
+    [maxcost::Float64]
+
+Note there is an a three argument constructor that leaves out maxcost. It
+will set maxcost to 0.0, which is treated as no limit in the MOEA.
+
+"""
 @with_kw struct MixRequirements
     nspecs::Int64
     totalweight::Float64
@@ -94,6 +115,11 @@ function MixRequirements(nspecs::Int64, totalweight::Float64, minweight::Float64
 end
 
 #= Evaluation functions =#
+"""
+    get_phylo_dist(mix::MixData, sd::SpeciesData)
+
+Computes summed pairwise phylogenetic distance.
+"""
 function get_phylo_dist(mix::MixData, sd::SpeciesData)
     @unpack specindices = mix
     @unpack phylo = sd
@@ -110,12 +136,14 @@ function get_phylo_dist(mix::MixData, sd::SpeciesData)
     return pd /= 2.0
 end
 
+"Calculates Shannon Diversity"
 function get_shannon(mix::MixData, sd::SpeciesData)
     @unpack specweights = mix
     p = specweights ./ sum(specweights)
     return shannon = exp(-1.0 * sum(p .* log.(p)))
 end
 
+"Calculates cost of the mix: sum of weight * cost"
 function get_cost(mix::MixData, sd::SpeciesData)
     @unpack specindices, specweights = mix
     @unpack cost = sd
@@ -126,6 +154,7 @@ function get_cost(mix::MixData, sd::SpeciesData)
     return mixcost
 end
 
+"Calculates conservatism value"
 function get_consval(mix::MixData, sd::SpeciesData)
     @unpack specindices, specweights = mix
     @unpack conservatism = sd
@@ -136,6 +165,7 @@ function get_consval(mix::MixData, sd::SpeciesData)
     return mixcons
 end
 
+"Calculates bloom index: sum of square root of # flowering species per month"
 function get_bloom(mix::MixData, sd::SpeciesData, penaltyfun=sqrt)
     @unpack specindices, specweights = mix
     @unpack bloom = sd
@@ -144,6 +174,7 @@ function get_bloom(mix::MixData, sd::SpeciesData, penaltyfun=sqrt)
     return sum(penaltyfun.(blooms_month_count))
 end
 
+"Calculates the fraction of mix species that are grasses"
 function get_grass_spec_frac(mix::MixData, sd::SpeciesData)
     @unpack specindices = mix
     @unpack grass = sd
@@ -152,6 +183,7 @@ function get_grass_spec_frac(mix::MixData, sd::SpeciesData)
     return mixG/mix.nspecs
 end
 
+"Calculates the weight fraction of seeds that are grasses"
 function get_grass_weight_frac(mix::MixData, sd::SpeciesData)
     @unpack specindices, specweights = mix
     @unpack grass = sd

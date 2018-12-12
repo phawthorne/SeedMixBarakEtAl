@@ -2,3 +2,4 @@
 *.png
 data/*
 results/*
+docs/build/*
