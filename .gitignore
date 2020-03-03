@@ -3,3 +3,4 @@
 data/*
 results/*
 docs/build/*
+run_scripts/median random mix scores.csv

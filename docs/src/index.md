@@ -5,6 +5,11 @@ Documentation for `SeedMix.jl`, a julia package for optimizing and analyzing see
 ```@contents
 ```
 
+## Data loading function
+```@docs
+SpeciesData(tablefile::String, phlofile::String)
+```
+
 ## Data types
 These are the structs that you need to run these analyses.
 ```@docs
@@ -12,12 +17,6 @@ SpeciesData
 MixData
 MixRequirements
 ```
-
-## Data loading function
-```@docs
-SpeciesData(tablefile::String, phlofile::String)
-```
-
 
 
 ## Evaluation functions

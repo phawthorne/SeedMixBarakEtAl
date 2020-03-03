@@ -19,9 +19,8 @@ end
     SpeciesData(tablefile::String, phylofile::String)
 
 Reads data from `tablefile` and `phylofile` to construct the `SpeciesData`
-structure. 
+structure.
 """
-
 function SpeciesData(tablefile::String, phylofile::String)
     table = CSV.read(tablefile)
     phylo = CSV.read(phylofile)
@@ -52,7 +51,7 @@ function SpeciesData(tablefile::String, phylofile::String)
         si = phylolookup[s]
         for (j, t) in enumerate(specpool)
             phylomat[i,j] = phylo[si, Symbol(t)] # have to do it this way because we know
-                                             # the row order, but not col order
+                                                 # the row order, but not col order
         end
     end
 
