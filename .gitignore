@@ -4,3 +4,7 @@ data/*
 results/*
 docs/build/*
 run_scripts/median random mix scores.csv
+.DS_Store
+run_scripts/random_samples
+.vscode/*
+*.code-workspace
