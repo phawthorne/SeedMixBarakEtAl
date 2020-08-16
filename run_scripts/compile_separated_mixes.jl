@@ -1,7 +1,7 @@
 using CSV
 using DataFrames
 using DelimitedFiles
-using SeedMix
+using SeedMixFunctions
 
 "I should probably take a folder name as an argument"
 function main()

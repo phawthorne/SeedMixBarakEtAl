@@ -5,7 +5,7 @@ using DataFrames
 using DelimitedFiles
 using Parameters
 using Random
-using SeedMix
+using SeedMixFunctions
 using Echidna
 
 struct RunParams

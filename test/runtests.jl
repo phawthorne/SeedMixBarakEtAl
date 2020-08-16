@@ -1,4 +1,4 @@
-using Test, SeedMix
+using Test, SeedMixFunctions
 
 println("Testing")
 

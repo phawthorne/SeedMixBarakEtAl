@@ -1,7 +1,7 @@
 using CSV
 using DataFrames
 using Plots
-using SeedMix
+using SeedMixFunctions
 using Echidna
 
 tablefile = "/Users/hawt0010/Projects/seed-mix/new_data_august_2018/Plant_data_updated_8_3_18.csv"

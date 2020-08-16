@@ -1,7 +1,5 @@
 name = "SeedMix"
-uuid = "84f8da0a-c410-11e8-0a93-9b44bfeeeb45"
 authors = ["Peter Hawthorne <hawt0010@umn.edu>"]
-version = "0.1.0"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"

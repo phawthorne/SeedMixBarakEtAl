@@ -1,4 +1,4 @@
-module SeedMix
+module SeedMixFunctions
 
 include("mixes.jl")
 export SpeciesData, MixData, MixRequirements, length,
