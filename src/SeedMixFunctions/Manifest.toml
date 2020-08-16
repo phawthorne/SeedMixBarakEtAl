@@ -55,6 +55,14 @@ uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
+[[Echidna]]
+deps = ["CSV", "DataFrames", "LinearAlgebra", "Parameters", "Random", "Test"]
+git-tree-sha1 = "6bb0bf6a7601e99749d1b82259c5c5b6ace8c748"
+repo-rev = "master"
+repo-url = "https://github.com/phawthorne/Echidna"
+uuid = "47cd21f4-9f3c-11e8-2f5c-c95eae34bde6"
+version = "0.1.0"
+
 [[Future]]
 deps = ["Random"]
 uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"

@@ -170,7 +170,7 @@ version = "0.2.0"
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 
 [[SeedMixFunctions]]
-deps = ["CSV", "DataFrames", "Parameters", "Random"]
+deps = ["CSV", "DataFrames", "DelimitedFiles", "Echidna", "Parameters", "Random"]
 path = "src/SeedMixFunctions"
 uuid = "636a8cd9-c8e2-4c7d-8a4a-9bd57a6d3bc9"
 version = "0.1.0"
