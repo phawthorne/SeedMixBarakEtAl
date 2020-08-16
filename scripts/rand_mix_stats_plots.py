@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 df = pd.read_csv('random_samples/means.csv')
 xcol = "SpecsInMix"
-ycols = ["PD", "Shannon", "Cost","ConsVal","Bloom"]
+ycols = ["PD", "Shannon", "Cost", "ConsVal", "Bloom"]
 
 fig, axes = plt.subplots(3, 2, figsize=(8, 10))
 
