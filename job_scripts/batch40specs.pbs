@@ -1,6 +1,0 @@
-#!/bin/bash -l
-#PBS -l walltime=12:00:00,nodes=1:ppn=1,pmem=4000mb
-#PBS -m abe
-#PBS -M hawt0010@umn.edu
-cd ~/Projects/SeedMix/run_scripts
-~/julia-0.7.0/bin/julia multistart.jl -n 40 -t 20 -p 200 -g 5000
