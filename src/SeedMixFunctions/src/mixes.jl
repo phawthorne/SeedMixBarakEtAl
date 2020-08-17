@@ -99,7 +99,6 @@ Structure capturing requirements for each mix:
 
 Note there is an a three argument constructor that leaves out maxcost. It
 will set maxcost to 0.0, which is treated as no limit in the MOEA.
-
 """
 @with_kw struct MixRequirements
     nspecs::Int64

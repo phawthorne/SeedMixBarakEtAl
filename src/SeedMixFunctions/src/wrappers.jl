@@ -3,7 +3,13 @@ using DataFrames
 using DelimitedFiles
 using Echidna
 
+"""
+Struct that defines parameters for the genetic algorithm (GA) function:
 
+    nstarts::Int64  -  number of separate GA iterations to run
+    popsize::Int64  -  population size for each GA run
+    ngens::Int64    -  number of generations to simulate in each GA run
+"""
 struct RunParams
     nstarts::Int64
     popsize::Int64
