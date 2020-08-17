@@ -2,4 +2,4 @@ language: julia
 julia:
   - 1
 script:
-  - julia --project=test -e 'using Pkg; Pkg.instantiate(); Pkg.test(SeedMixFunctions)'
+  - julia --project=test -e 'using Pkg; println(pwd()); Pkg.instantiate(); Pkg.activate("."); Pkg.test("SeedMixFunctions")'
