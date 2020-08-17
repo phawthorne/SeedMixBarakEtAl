@@ -1,4 +1,7 @@
 # Seed Mix Optimization
+
+[![Build Status](https://travis-ci.com/phawthorne/SeedMixBarakEtAl.svg?branch=master)](https://travis-ci.com/phawthorne/SeedMixBarakEtAl)
+
 Code repository for the optimization method described in Barak et al (2021). A 
 [demonstration visualization and tool](https://phawthorne.github.io/computational-seed-mix-design/)
 is also available [coming soon!].

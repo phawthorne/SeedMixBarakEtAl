@@ -16,3 +16,6 @@ makedocs(
         "Code documentation" => "SeedMixFunctions.md"
     ]
 )
+deploydocs(
+    repo = "github.com/phawthore/SeedMixBarakEtAl.git"
+)
