@@ -1,6 +1,7 @@
 # Seed Mix Optimization
 
 [![Build Status](https://travis-ci.com/phawthorne/SeedMixBarakEtAl.svg?branch=master)](https://travis-ci.com/phawthorne/SeedMixBarakEtAl)
+[![](https://img.shields.io/badge/docs-dev-blue.svg)](https://phawthorne.github.io/SeedMixBarakEtAl/dev)
 
 Code repository for the optimization method described in Barak et al (2021). A 
 [demonstration visualization and tool](https://phawthorne.github.io/computational-seed-mix-design/)
@@ -22,7 +23,8 @@ The core algorithms are written in the [Julia language](https://julialang.org/).
     - Close Julia
 1. Set up Julia to be able to call it from the command line. 
 1. Navigate to the scripts directory.
-1. Run command with desired arguments (see [documentation]() for options)
+1. Run command with desired arguments (see [documentation](https://phawthorne.github.io/SeedMixBarakEtAl/dev/)
+for options)
     ```
     % julia multistart.jl [args]
     ```

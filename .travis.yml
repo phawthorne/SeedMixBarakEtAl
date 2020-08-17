@@ -1,9 +1,4 @@
 language: julia
-os: linux
-julia:
-  - 1
-script:
-  - julia --project=test -e 'using Pkg; Pkg.instantiate(); Pkg.activate("."); Pkg.test("SeedMixFunctions")'
 jobs:
   include:
     - stage: "Documentation"
@@ -15,3 +10,9 @@ jobs:
         - cd docs
         - julia --color=yes make.jl
       after_success: skip
+    - stage: "Test"
+      os: linux
+      julia:
+        - 1
+      script:
+        - julia --project=test -e 'using Pkg; Pkg.instantiate(); Pkg.activate("."); Pkg.test("SeedMixFunctions")'
