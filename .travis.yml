@@ -9,7 +9,9 @@ jobs:
     - stage: "Documentation"
       julia: 1
       os: linux
+      # having to deviate from the default because my top-level repo is not a package with a uuid
       script:
-        - julia --project=docs/ -e 'using Pkg; Pkg.instantiate(); Pkg.activate(".");'
-        - julia --project=docs/ --color=yes docs/make.jl
+        - julia -e 'using Pkg; Pkg.instantiate(); Pkg.activate(".");'
+        - cd docs
+        - julia --color=yes make.jl
       after_success: skip
