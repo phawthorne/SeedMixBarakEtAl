@@ -61,6 +61,18 @@ uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
+[[DocStringExtensions]]
+deps = ["LibGit2", "Markdown", "Pkg", "Test"]
+git-tree-sha1 = "c5714d9bcdba66389612dc4c47ed827c64112997"
+uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+version = "0.8.2"
+
+[[Documenter]]
+deps = ["Base64", "Dates", "DocStringExtensions", "InteractiveUtils", "JSON", "LibGit2", "Logging", "Markdown", "REPL", "Test", "Unicode"]
+git-tree-sha1 = "1c593d1efa27437ed9dd365d1143c594b563e138"
+uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+version = "0.25.1"
+
 [[Echidna]]
 deps = ["CSV", "DataFrames", "LinearAlgebra", "Parameters", "Random", "Test"]
 git-tree-sha1 = "6bb0bf6a7601e99749d1b82259c5c5b6ace8c748"
