@@ -1,4 +1,4 @@
-# Usage
+# Running an optimization
 
 The main way to run the code is through the `scripts/multistart.jl` script, which 
 loads the appropriate data and executes an optimization run. The script must

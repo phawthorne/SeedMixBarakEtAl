@@ -17,5 +17,5 @@ makedocs(
     ]
 )
 deploydocs(
-    repo = "github.com/phawthore/SeedMixBarakEtAl.git"
+    repo = "github.com/phawthorne/SeedMixBarakEtAl.git"
 )

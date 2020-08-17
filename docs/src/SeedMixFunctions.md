@@ -1,4 +1,4 @@
-# Documentation for SeedMixFunctions.jl
+# Code documentation
 
 SeedMixFunctions.jl is the included package that provides the mix evaluation
 and GA run initiation functions. Use of these functions isn't required to 
