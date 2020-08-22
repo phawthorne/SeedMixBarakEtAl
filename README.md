@@ -5,7 +5,7 @@
 
 Code repository for the optimization method described in Barak et al (2021). A 
 [demonstration visualization and tool](https://phawthorne.github.io/computational-seed-mix-design/)
-is also available [coming soon!].
+is also available.
 
 ## Installation
 The core algorithms are written in the [Julia language](https://julialang.org/). Steps to running the code:
