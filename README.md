@@ -4,30 +4,29 @@
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://phawthorne.github.io/SeedMixBarakEtAl/dev)
 
 Code repository for the optimization method described in Barak et al (2021). A 
-[demonstration visualization and tool](https://phawthorne.github.io/computational-seed-mix-design/)
+[demonstration visualization tool](https://github.com/phawthorne/computational-seed-mix-design/)
 is also available.
 
 ## Installation
 The core algorithms are written in the [Julia language](https://julialang.org/). Steps to running the code:
 
 1. Download Julia (code was tested with Julia 1.5).
-1. Clone this code repository
+1. Set up Julia to be able to call it from the command line.
+    - On Mac, for example, add `alias julia="/Applications/Julia-1.5.app/Contents/Resources/julia/bin/julia"` to your `.zshrc` file.
+1. Clone this code repository using git.
 1. Set up the Julia environment
+    - Navigate to this repo's folder in the command line
     - Open Julia
     - Enter these commands:
     ```
     julia> include Pkg
-    julia> activate .
-    julia> instantiate
+    julia> Pkg.activate(".")
+    julia> Pkg.instantiate()
+    julia> exit()
     ```
-    - Close Julia
-1. Set up Julia to be able to call it from the command line. 
-1. Navigate to the scripts directory.
-1. Run command with desired arguments (see [documentation](https://phawthorne.github.io/SeedMixBarakEtAl/dev/)
-for options)
-    ```
-    % julia multistart.jl [args]
-    ```
+1. Now navigate to the scripts directory.
+1. Run the optimization script (`julia multistart.jl`) with desired arguments 
+(see [documentation]() for options)
 
 ## Other notes
 This code depends on [Echidna](https://github.com/phawthorne/Echidna), which implements the underlying 
