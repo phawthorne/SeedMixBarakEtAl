@@ -1,11 +1,12 @@
-# Running an optimization
+# Usage
 
+## Running an optimization
 The main way to run the code is through the `scripts/multistart.jl` script, which 
 loads the appropriate data and executes an optimization run. The script must
 be called through the command line from the `scripts` folder:
 
 ```
-% cd scripts
+% cd [..]SeedMixBarakEtAl/scripts
 % julia multistart.jl
 ```
 
