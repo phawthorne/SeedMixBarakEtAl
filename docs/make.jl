@@ -13,6 +13,7 @@ makedocs(
         "Home" => "index.md",
         "Installation" => "installation.md",
         "Usage" => "usage.md",
+        "Tool" => "tool.md",
         "Code documentation" => "SeedMixFunctions.md"
     ]
 )
